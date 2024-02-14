@@ -1,0 +1,32 @@
+services:
+  app:
+    build: .
+    command: ["make", "run"]
+    ports:
+      - "8000:8000"
+    environment:
+      POSTGRES_HOST: postgres
+
+    env_file:
+      - .env
+
+    volumes:
+      - ./publication_admin:/app/publication_admin
+      - ./migrations:/app/migrations
+      - ./tests:/app/tests
+
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: publication-admin
+      POSTGRES_USER: publication-admin-user
+      POSTGRES_PASSWORD: password
+
+    ports:
+      - "5432:5432"
+
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+volumes:
+  db-data:
